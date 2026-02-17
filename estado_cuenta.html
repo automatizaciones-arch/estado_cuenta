@@ -452,12 +452,12 @@ console.log('Importe Venta:', importeVenta);
 const totalAbonado = abonos.reduce((s, r) => s + parseNum(r.abono), 0);
 const saldoActual  = abonos.length ? parseNum(abonos[abonos.length-1].saldo) : parseNum(importeVenta);
 
-// Ordenar todos los abonos por fecha (más recientes primero)
+// Ordenar todos los abonos por fecha (más antiguos primero)
 const todosAbonos = abonos.sort((a, b) => {
   // Intentar parsear fechas para ordenar correctamente
   const dateA = new Date(a.fecha);
   const dateB = new Date(b.fecha);
-  return dateB - dateA;
+  return dateA - dateB; // Cambio: antiguos primero
 });
 
 function buildRows(arr, startDelay) {
