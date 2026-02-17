@@ -47,10 +47,10 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
-    width: 140px;
-    height: 140px;
-    opacity: 0.18;
+    transform: translate(-50%, -50%) rotate(-20deg);
+    width: 200px;
+    height: 200px;
+    opacity: 0.1;
     pointer-events: none;
   }
 
@@ -58,7 +58,6 @@
     width: 100%;
     height: 100%;
     object-fit: contain;
-    filter: brightness(1.2);
   }
 
   .container {
@@ -91,9 +90,16 @@
   .header::after {
     content: '';
     position: absolute;
-    top: -40px; right: -40px;
-    width: 160px; height: 160px;
-    background: radial-gradient(circle, rgba(212,165,116,0.15) 0%, transparent 70%);
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background-image: url('https://i.postimg.cc/PJkb6GV4/Logo-Murbleria.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.08;
+    transform: rotate(-20deg);
     pointer-events: none;
   }
 
@@ -478,7 +484,7 @@ document.getElementById('app').innerHTML = `
   <!-- HEADER -->
   <div class="header">
     <div class="logo-container">
-      <img src="https://raw.githubusercontent.com/automatizaciones-arch/estado_cuenta/main/Logo_Murbleria.png" alt="Logo">
+      <img src="https://i.postimg.cc/PJkb6GV4/Logo-Murbleria.png" alt="Logo">
     </div>
     <div>
       <div class="brand">Estado de Cuenta</div>
