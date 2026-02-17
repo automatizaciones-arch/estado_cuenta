@@ -7,16 +7,17 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Sora:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0d1117;
-    --surface: #161b22;
-    --surface2: #1c2330;
-    --border: #30363d;
-    --accent: #00e5a0;
-    --accent2: #0099ff;
-    --danger: #ff4757;
-    --text: #e6edf3;
-    --muted: #7d8590;
-    --card-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    --bg: #0a0a0a;
+    --surface: #1a1a1a;
+    --surface2: #242424;
+    --border: #2d5a7b;
+    --accent: #d4a574;
+    --accent2: #2d5a7b;
+    --accent-green: #00e5a0;
+    --danger: #ff6b6b;
+    --text: #f0f0f0;
+    --muted: #8b9db8;
+    --card-shadow: 0 8px 32px rgba(0,0,0,0.5);
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -35,11 +36,28 @@
     position: fixed;
     inset: 0;
     background-image:
-      linear-gradient(rgba(0,229,160,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0,229,160,0.03) 1px, transparent 1px);
+      linear-gradient(rgba(212,165,116,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(212,165,116,0.03) 1px, transparent 1px);
     background-size: 40px 40px;
     pointer-events: none;
     z-index: 0;
+  }
+
+  .logo-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80px;
+    height: 80px;
+    opacity: 0.08;
+    pointer-events: none;
+  }
+
+  .logo-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
   }
 
   .container {
@@ -74,16 +92,24 @@
     position: absolute;
     top: -40px; right: -40px;
     width: 160px; height: 160px;
-    background: radial-gradient(circle, rgba(0,229,160,0.12) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(212,165,116,0.15) 0%, transparent 70%);
     pointer-events: none;
   }
 
   .brand {
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 600;
     letter-spacing: 3px;
     text-transform: uppercase;
     color: var(--accent);
+    margin-bottom: 4px;
+  }
+
+  .brand-name {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--accent2);
     margin-bottom: 8px;
   }
 
@@ -168,7 +194,7 @@
   }
 
   .summary-value.venta   { color: var(--accent2); }
-  .summary-value.abonado { color: var(--accent); }
+  .summary-value.abonado { color: var(--accent-green); }
   .summary-value.saldo   { color: var(--danger); }
 
   /* ── SECTION TITLE ── */
@@ -190,7 +216,7 @@
   }
 
   .section-dot.hist { background: var(--muted); }
-  .section-dot.curr { background: var(--accent); }
+  .section-dot.curr { background: var(--accent-green); }
 
   .section-title {
     font-size: 11px;
@@ -251,7 +277,7 @@
     to   { opacity: 1; transform: translateX(0); }
   }
 
-  tbody tr:hover { background: rgba(0,229,160,0.03); }
+  tbody tr:hover { background: rgba(212,165,116,0.05); }
 
   tbody td {
     padding: 12px 16px;
@@ -263,7 +289,7 @@
   .td-fecha { color: var(--muted); font-size: 12px; }
 
   .td-adeudo  { text-align: right; color: var(--muted); }
-  .td-abono   { text-align: right; color: var(--accent); font-weight: 500; }
+  .td-abono   { text-align: right; color: var(--accent-green); font-weight: 500; }
   .td-saldo   { text-align: right; }
 
   .saldo-pill {
@@ -339,6 +365,39 @@ function getParam(name) {
   return decodeURIComponent(url.searchParams.get(name) || '');
 }
 
+function formatDate(dateStr) {
+  // Si ya viene en formato correcto (DD-MMM-YYYY o similar), devolverlo
+  if (!dateStr) return dateStr;
+  
+  // Intentar parsear diferentes formatos
+  let date;
+  
+  // Formato MM/DD/YYYY o DD/MM/YYYY
+  if (dateStr.includes('/')) {
+    const parts = dateStr.split('/');
+    date = new Date(parts[2], parts[0] - 1, parts[1]);
+  }
+  // Formato YYYY-MM-DD
+  else if (dateStr.includes('-') && dateStr.length === 10) {
+    date = new Date(dateStr);
+  }
+  // Ya viene formateado
+  else {
+    return dateStr;
+  }
+  
+  if (isNaN(date.getTime())) return dateStr;
+  
+  const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 
+                  'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+  
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = months[date.getMonth()];
+  const year = date.getFullYear();
+  
+  return `${day}-${month}-${year}`;
+}
+
 function fmt(val) {
   const n = parseFloat(String(val).replace(/[^0-9.-]/g, ''));
   if (isNaN(n)) return val;
@@ -386,7 +445,7 @@ function buildRows(arr, startDelay) {
   if (!arr.length) return `<tr><td colspan="4" class="empty">Sin registros</td></tr>`;
   return arr.map((r, i) => `
     <tr style="animation-delay:${startDelay + i * 60}ms">
-      <td class="td-fecha">${r.fecha}</td>
+      <td class="td-fecha">${formatDate(r.fecha)}</td>
       <td class="td-adeudo">${fmt(r.adeudo)}</td>
       <td class="td-abono">+${fmt(r.abono)}</td>
       <td class="td-saldo"><span class="saldo-pill">${fmt(r.saldo)}</span></td>
@@ -398,14 +457,18 @@ function buildRows(arr, startDelay) {
 document.getElementById('app').innerHTML = `
   <!-- HEADER -->
   <div class="header">
+    <div class="logo-container">
+      <img src="https://raw.githubusercontent.com/automatizaciones-arch/estado_cuenta/main/Logo_Murbleria.png" alt="Logo">
+    </div>
     <div>
       <div class="brand">Estado de Cuenta</div>
+      <div class="brand-name">MUEBLERÍA ADRIANA</div>
       <div class="folio-title">${folio}</div>
       <div class="cliente-name">${cliente} · ${localidad}</div>
     </div>
     <div class="header-right">
       <div class="fecha-label">Fecha de venta</div>
-      <div class="fecha-val">${fechaVenta}</div>
+      <div class="fecha-val">${formatDate(fechaVenta)}</div>
       <div class="ruta-badge">${ruta} / ${sucursal}</div>
     </div>
   </div>
@@ -470,7 +533,7 @@ document.getElementById('app').innerHTML = `
   <div class="footer">
     <div class="footer-note">
       Generado automáticamente<br>
-      <span style="font-family:'DM Mono',monospace;font-size:10px;opacity:.6">${new Date().toLocaleDateString('es-MX', {day:'2-digit',month:'long',year:'numeric'})}</span>
+      <span style="font-family:'DM Mono',monospace;font-size:10px;opacity:.6">${formatDate(new Date().toLocaleDateString('es-MX', {day:'2-digit',month:'2-digit',year:'numeric'}))}</span>
     </div>
     <div>
       <div class="saldo-final-label">Saldo Pendiente</div>
