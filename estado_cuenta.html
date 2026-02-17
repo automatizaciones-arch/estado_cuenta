@@ -451,8 +451,14 @@ console.log('Importe Venta:', importeVenta);
 // ── CÁLCULOS ──
 const totalAbonado = abonos.reduce((s, r) => s + parseNum(r.abono), 0);
 const saldoActual  = abonos.length ? parseNum(abonos[abonos.length-1].saldo) : parseNum(importeVenta);
-const historicos   = abonos.filter(a => a.tipo === 'historico');
-const registros    = abonos.filter(a => a.tipo === 'registro');
+
+// Ordenar todos los abonos por fecha (más recientes primero)
+const todosAbonos = abonos.sort((a, b) => {
+  // Intentar parsear fechas para ordenar correctamente
+  const dateA = new Date(a.fecha);
+  const dateB = new Date(b.fecha);
+  return dateB - dateA;
+});
 
 function buildRows(arr, startDelay) {
   if (!arr.length) return `<tr><td colspan="4" class="empty">Sin registros</td></tr>`;
@@ -502,31 +508,11 @@ document.getElementById('app').innerHTML = `
     </div>
   </div>
 
-  <!-- TABLA HISTÓRICOS -->
-  <div class="section-header">
-    <div class="section-dot hist"></div>
-    <div class="section-title">Registro Histórico</div>
-    <div class="section-count">${historicos.length} pagos</div>
-  </div>
-  <div class="table-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th>Fecha</th>
-          <th style="text-align:right">Adeudo</th>
-          <th style="text-align:right">Abono</th>
-          <th style="text-align:right">Saldo</th>
-        </tr>
-      </thead>
-      <tbody>${buildRows(historicos, 100)}</tbody>
-    </table>
-  </div>
-
-  <!-- TABLA REGISTROS ACTUALES -->
+  <!-- TABLA UNIFICADA -->
   <div class="section-header">
     <div class="section-dot curr"></div>
-    <div class="section-title">Registros Recientes</div>
-    <div class="section-count">${registros.length} pagos</div>
+    <div class="section-title">Registros de Cobranza</div>
+    <div class="section-count">${todosAbonos.length} pagos</div>
   </div>
   <div class="table-wrap">
     <table>
@@ -538,7 +524,7 @@ document.getElementById('app').innerHTML = `
           <th style="text-align:right">Saldo</th>
         </tr>
       </thead>
-      <tbody>${buildRows(registros, 300)}</tbody>
+      <tbody>${buildRows(todosAbonos, 100)}</tbody>
     </table>
   </div>
 
