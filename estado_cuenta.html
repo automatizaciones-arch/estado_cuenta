@@ -399,9 +399,18 @@ function formatDate(dateStr) {
 }
 
 function fmt(val) {
-  const n = parseFloat(String(val).replace(/[^0-9.-]/g, ''));
+  // Limpiar el valor: remover $, comas y espacios
+  const cleaned = String(val).replace(/[\$,\s]/g, '');
+  const n = parseFloat(cleaned);
   if (isNaN(n)) return val;
   return '$' + n.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function parseNum(val) {
+  // Función auxiliar para convertir valores con $ y comas a número
+  const cleaned = String(val).replace(/[\$,\s]/g, '');
+  const n = parseFloat(cleaned);
+  return isNaN(n) ? 0 : n;
 }
 
 // ── DATOS (vendrán por URL en producción) ──
@@ -435,9 +444,13 @@ if (!abonos.length) {
   ];
 }
 
+// Debug: mostrar datos en consola
+console.log('Abonos recibidos:', abonos);
+console.log('Importe Venta:', importeVenta);
+
 // ── CÁLCULOS ──
-const totalAbonado = abonos.reduce((s, r) => s + parseFloat(r.abono), 0);
-const saldoActual  = abonos.length ? parseFloat(abonos[abonos.length-1].saldo) : parseFloat(importeVenta);
+const totalAbonado = abonos.reduce((s, r) => s + parseNum(r.abono), 0);
+const saldoActual  = abonos.length ? parseNum(abonos[abonos.length-1].saldo) : parseNum(importeVenta);
 const historicos   = abonos.filter(a => a.tipo === 'historico');
 const registros    = abonos.filter(a => a.tipo === 'registro');
 
