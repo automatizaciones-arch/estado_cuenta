@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Estado de Cuenta</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Sora:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1c2330;
+    --border: #30363d;
+    --accent: #00e5a0;
+    --accent2: #0099ff;
+    --danger: #ff4757;
+    --text: #e6edf3;
+    --muted: #7d8590;
+    --card-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Sora', sans-serif;
+    min-height: 100vh;
+    padding: 24px 16px 48px;
+  }
+
+  /* ── animated grid background ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,229,160,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,160,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 760px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+    animation: fadeUp 0.5s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── HEADER ── */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 28px 32px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px 16px 0 0;
+    border-bottom: 2px solid var(--accent);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .header::after {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 160px; height: 160px;
+    background: radial-gradient(circle, rgba(0,229,160,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .brand {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  .folio-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 28px;
+    font-weight: 500;
+    letter-spacing: -0.5px;
+    color: var(--text);
+  }
+
+  .cliente-name {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 6px;
+    font-weight: 300;
+    letter-spacing: 0.3px;
+  }
+
+  .header-right {
+    text-align: right;
+  }
+
+  .fecha-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+
+  .fecha-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    color: var(--text);
+  }
+
+  .ruta-badge {
+    margin-top: 10px;
+    display: inline-block;
+    padding: 3px 10px;
+    background: rgba(0,153,255,0.12);
+    border: 1px solid rgba(0,153,255,0.3);
+    border-radius: 20px;
+    font-size: 11px;
+    color: var(--accent2);
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 1px;
+  }
+
+  /* ── RESUMEN CARDS ── */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border-left: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+  }
+
+  .summary-card {
+    background: var(--surface2);
+    padding: 20px 24px;
+    text-align: center;
+    transition: background 0.2s;
+  }
+
+  .summary-card:hover { background: #20293a; }
+
+  .summary-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .summary-value {
+    font-family: 'DM Mono', monospace;
+    font-size: 20px;
+    font-weight: 500;
+  }
+
+  .summary-value.venta   { color: var(--accent2); }
+  .summary-value.abonado { color: var(--accent); }
+  .summary-value.saldo   { color: var(--danger); }
+
+  /* ── SECTION TITLE ── */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 18px 24px 14px;
+    background: var(--surface);
+    border-left: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    margin-top: 2px;
+  }
+
+  .section-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .section-dot.hist { background: var(--muted); }
+  .section-dot.curr { background: var(--accent); }
+
+  .section-title {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    font-weight: 600;
+    color: var(--muted);
+  }
+
+  .section-count {
+    margin-left: auto;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    background: var(--surface2);
+    padding: 2px 8px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+
+  /* ── TABLE ── */
+  .table-wrap {
+    border-left: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  thead th {
+    background: var(--surface2);
+    padding: 10px 16px;
+    text-align: left;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    font-weight: 600;
+    border-bottom: 1px solid var(--border);
+  }
+
+  thead th:last-child { text-align: right; }
+  thead th:nth-child(3),
+  thead th:nth-child(4) { text-align: right; }
+
+  tbody tr {
+    border-bottom: 1px solid rgba(48,54,61,0.5);
+    transition: background 0.15s;
+    animation: rowIn 0.35s ease both;
+  }
+
+  @keyframes rowIn {
+    from { opacity: 0; transform: translateX(-8px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  tbody tr:hover { background: rgba(0,229,160,0.03); }
+
+  tbody td {
+    padding: 12px 16px;
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 12.5px;
+  }
+
+  .td-fecha { color: var(--muted); font-size: 12px; }
+
+  .td-adeudo  { text-align: right; color: var(--muted); }
+  .td-abono   { text-align: right; color: var(--accent); font-weight: 500; }
+  .td-saldo   { text-align: right; }
+
+  .saldo-pill {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    background: rgba(255,71,87,0.1);
+    border: 1px solid rgba(255,71,87,0.25);
+    color: var(--danger);
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: 2px solid var(--border);
+    border-radius: 0 0 16px 16px;
+    padding: 20px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1px;
+  }
+
+  .footer-note {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.3px;
+  }
+
+  .saldo-final-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--muted);
+    margin-bottom: 4px;
+    text-align: right;
+  }
+
+  .saldo-final-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--danger);
+    text-align: right;
+  }
+
+  /* ── EMPTY STATE ── */
+  .empty {
+    padding: 32px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    font-style: italic;
+  }
+</style>
+</head>
+<body>
+<div class="container" id="app">
+  <!-- Renderizado por JS desde parámetros URL -->
+</div>
+
+<script>
+// ─────────────────────────────────────────────────────────
+// LECTURA DE PARÁMETROS DE LA URL
+// AppSheet pasará estos parámetros al abrir la URL:
+//   folio, cliente, ruta, sucursal, fechaVenta, importeVenta,
+//   dia, localidad, abonos (JSON codificado)
+// ─────────────────────────────────────────────────────────
+function getParam(name) {
+  const url = new URL(window.location.href);
+  return decodeURIComponent(url.searchParams.get(name) || '');
+}
+
+function fmt(val) {
+  const n = parseFloat(String(val).replace(/[^0-9.-]/g, ''));
+  if (isNaN(n)) return val;
+  return '$' + n.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+// ── DATOS (vendrán por URL en producción) ──
+// Para prueba/demo se usan valores de ejemplo si no hay params
+const folio       = getParam('folio')       || 'M6-000067';
+const cliente     = getParam('cliente')     || 'GALLARDO ROMERO ALMA DELIA';
+const ruta        = getParam('ruta')        || 'RUTA11';
+const sucursal    = getParam('sucursal')    || 'MAZATLAN';
+const fechaVenta  = getParam('fechaVenta')  || '11/01/2026';
+const importeVenta= getParam('importeVenta')|| '8990';
+const localidad   = getParam('localidad')  || 'MONTUOSA';
+
+// Abonos históricos (JSON array)
+// Cada abono: { fecha, adeudo, abono, saldo, tipo }
+// tipo: "historico" | "registro"
+let abonos = [];
+try {
+  const raw = getParam('abonos');
+  if (raw) abonos = JSON.parse(raw);
+} catch(e) {}
+
+// Si no hay datos, usar demo
+if (!abonos.length) {
+  abonos = [
+    { fecha:'12-ene.-26', adeudo:'8990.00', abono:'250.00', saldo:'8740.00', tipo:'historico' },
+    { fecha:'17-ene.-26', adeudo:'8740.00', abono:'170.00', saldo:'8570.00', tipo:'historico' },
+    { fecha:'25-ene.-26', adeudo:'8570.00', abono:'170.00', saldo:'8400.00', tipo:'registro'  },
+    { fecha:'31-ene.-26', adeudo:'8400.00', abono:'170.00', saldo:'8230.00', tipo:'registro'  },
+    { fecha:'07-feb.-26', adeudo:'8230.00', abono:'170.00', saldo:'8060.00', tipo:'registro'  },
+    { fecha:'14-feb.-26', adeudo:'8060.00', abono:'170.00', saldo:'7890.00', tipo:'registro'  },
+  ];
+}
+
+// ── CÁLCULOS ──
+const totalAbonado = abonos.reduce((s, r) => s + parseFloat(r.abono), 0);
+const saldoActual  = abonos.length ? parseFloat(abonos[abonos.length-1].saldo) : parseFloat(importeVenta);
+const historicos   = abonos.filter(a => a.tipo === 'historico');
+const registros    = abonos.filter(a => a.tipo === 'registro');
+
+function buildRows(arr, startDelay) {
+  if (!arr.length) return `<tr><td colspan="4" class="empty">Sin registros</td></tr>`;
+  return arr.map((r, i) => `
+    <tr style="animation-delay:${startDelay + i * 60}ms">
+      <td class="td-fecha">${r.fecha}</td>
+      <td class="td-adeudo">${fmt(r.adeudo)}</td>
+      <td class="td-abono">+${fmt(r.abono)}</td>
+      <td class="td-saldo"><span class="saldo-pill">${fmt(r.saldo)}</span></td>
+    </tr>
+  `).join('');
+}
+
+// ── RENDER ──
+document.getElementById('app').innerHTML = `
+  <!-- HEADER -->
+  <div class="header">
+    <div>
+      <div class="brand">Estado de Cuenta</div>
+      <div class="folio-title">${folio}</div>
+      <div class="cliente-name">${cliente} · ${localidad}</div>
+    </div>
+    <div class="header-right">
+      <div class="fecha-label">Fecha de venta</div>
+      <div class="fecha-val">${fechaVenta}</div>
+      <div class="ruta-badge">${ruta} / ${sucursal}</div>
+    </div>
+  </div>
+
+  <!-- RESUMEN -->
+  <div class="summary-grid">
+    <div class="summary-card">
+      <div class="summary-label">Importe Venta</div>
+      <div class="summary-value venta">${fmt(importeVenta)}</div>
+    </div>
+    <div class="summary-card">
+      <div class="summary-label">Total Abonado</div>
+      <div class="summary-value abonado">${fmt(totalAbonado)}</div>
+    </div>
+    <div class="summary-card">
+      <div class="summary-label">Saldo Actual</div>
+      <div class="summary-value saldo">${fmt(saldoActual)}</div>
+    </div>
+  </div>
+
+  <!-- TABLA HISTÓRICOS -->
+  <div class="section-header">
+    <div class="section-dot hist"></div>
+    <div class="section-title">Registro Histórico</div>
+    <div class="section-count">${historicos.length} pagos</div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th style="text-align:right">Adeudo</th>
+          <th style="text-align:right">Abono</th>
+          <th style="text-align:right">Saldo</th>
+        </tr>
+      </thead>
+      <tbody>${buildRows(historicos, 100)}</tbody>
+    </table>
+  </div>
+
+  <!-- TABLA REGISTROS ACTUALES -->
+  <div class="section-header">
+    <div class="section-dot curr"></div>
+    <div class="section-title">Registros Recientes</div>
+    <div class="section-count">${registros.length} pagos</div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th style="text-align:right">Adeudo</th>
+          <th style="text-align:right">Abono</th>
+          <th style="text-align:right">Saldo</th>
+        </tr>
+      </thead>
+      <tbody>${buildRows(registros, 300)}</tbody>
+    </table>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-note">
+      Generado automáticamente<br>
+      <span style="font-family:'DM Mono',monospace;font-size:10px;opacity:.6">${new Date().toLocaleDateString('es-MX', {day:'2-digit',month:'long',year:'numeric'})}</span>
+    </div>
+    <div>
+      <div class="saldo-final-label">Saldo Pendiente</div>
+      <div class="saldo-final-val">${fmt(saldoActual)}</div>
+    </div>
+  </div>
+`;
+</script>
+</body>
+</html>
