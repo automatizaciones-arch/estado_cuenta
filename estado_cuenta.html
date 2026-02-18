@@ -488,18 +488,50 @@ if (!abonos.length) {
 
 // Debug: mostrar datos en consola
 console.log('Abonos recibidos:', abonos);
-console.log('Importe Venta:', importeVenta);
+console.log('Importe Venta:', importeVenta, '=', importeVentaNum);
+console.log('Total Abonado:', totalAbonado);
+console.log('Saldo Calculado:', saldoActual);
+console.log('Abonos ordenados:', todosAbonos);
 
 // ── CÁLCULOS ──
 const totalAbonado = abonos.reduce((s, r) => s + parseNum(r.abono), 0);
-const saldoActual  = abonos.length ? parseNum(abonos[abonos.length-1].saldo) : parseNum(importeVenta);
+
+// Calcular saldo actual correctamente: Importe Venta - Total Abonado
+const importeVentaNum = parseNum(importeVenta);
+const saldoActual = importeVentaNum - totalAbonado;
 
 // Ordenar todos los abonos por fecha (más antiguos primero)
 const todosAbonos = abonos.sort((a, b) => {
-  // Intentar parsear fechas para ordenar correctamente
-  const dateA = new Date(a.fecha);
-  const dateB = new Date(b.fecha);
-  return dateA - dateB; // Cambio: antiguos primero
+  // Parsear fechas en formato DD-MMM-YY
+  function parseCustomDate(dateStr) {
+    if (!dateStr) return new Date(0);
+    
+    // Si viene en formato MM/DD/YYYY
+    if (dateStr.includes('/')) {
+      const parts = dateStr.split('/');
+      return new Date(parts[2], parts[0] - 1, parts[1]);
+    }
+    
+    // Si viene en formato DD-MMM-YY (ej: 19-oct.-25)
+    const months = {
+      'ene': 0, 'feb': 1, 'mar': 2, 'abr': 3, 'may': 4, 'jun': 5,
+      'jul': 6, 'ago': 7, 'sep': 8, 'oct': 9, 'nov': 10, 'dic': 11
+    };
+    
+    const parts = dateStr.toLowerCase().replace(/\./g, '').split('-');
+    if (parts.length === 3) {
+      const day = parseInt(parts[0]);
+      const month = months[parts[1]];
+      const year = parseInt(parts[2]) + 2000; // Asume 20XX
+      return new Date(year, month, day);
+    }
+    
+    return new Date(dateStr);
+  }
+  
+  const dateA = parseCustomDate(a.fecha);
+  const dateB = parseCustomDate(b.fecha);
+  return dateA - dateB; // Antiguos primero
 });
 
 function buildRows(arr, startDelay) {
