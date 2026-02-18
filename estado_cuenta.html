@@ -486,18 +486,11 @@ if (!abonos.length) {
   ];
 }
 
-// Debug: mostrar datos en consola
-console.log('Abonos recibidos:', abonos);
-console.log('Importe Venta:', importeVenta, '=', importeVentaNum);
-console.log('Total Abonado:', totalAbonado);
-console.log('Saldo Calculado:', saldoActual);
-console.log('Abonos ordenados:', todosAbonos);
-
 // ── CÁLCULOS ──
+const importeVentaNum = parseNum(importeVenta);
 const totalAbonado = abonos.reduce((s, r) => s + parseNum(r.abono), 0);
 
 // Calcular saldo actual correctamente: Importe Venta - Total Abonado
-const importeVentaNum = parseNum(importeVenta);
 const saldoActual = importeVentaNum - totalAbonado;
 
 // Ordenar todos los abonos por fecha (más antiguos primero)
@@ -533,6 +526,13 @@ const todosAbonos = abonos.sort((a, b) => {
   const dateB = parseCustomDate(b.fecha);
   return dateA - dateB; // Antiguos primero
 });
+
+// Debug: mostrar datos en consola (después de todas las declaraciones)
+console.log('Abonos recibidos:', abonos);
+console.log('Importe Venta:', importeVenta, '=', importeVentaNum);
+console.log('Total Abonado:', totalAbonado);
+console.log('Saldo Calculado:', saldoActual);
+console.log('Abonos ordenados:', todosAbonos);
 
 function buildRows(arr, startDelay) {
   if (!arr.length) return `<tr><td colspan="5" class="empty">Sin registros</td></tr>`;
