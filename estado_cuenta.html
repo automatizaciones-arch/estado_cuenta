@@ -298,6 +298,41 @@
   .td-adeudo  { text-align: right; color: var(--muted); }
   .td-abono   { text-align: right; color: var(--accent-green); font-weight: 500; }
   .td-saldo   { text-align: right; }
+  .td-tipo    { text-align: center; }
+
+  .tipo-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .tipo-cobranza {
+    background: rgba(0,229,160,0.15);
+    color: var(--accent-green);
+    border: 1px solid rgba(0,229,160,0.3);
+  }
+
+  .tipo-bonificacion {
+    background: rgba(45,90,123,0.15);
+    color: var(--accent2);
+    border: 1px solid rgba(45,90,123,0.3);
+  }
+
+  .tipo-anticipo {
+    background: rgba(212,165,116,0.15);
+    color: var(--accent);
+    border: 1px solid rgba(212,165,116,0.3);
+  }
+
+  .tipo-devolucion {
+    background: rgba(255,107,107,0.15);
+    color: var(--danger);
+    border: 1px solid rgba(255,107,107,0.3);
+  }
 
   .saldo-pill {
     display: inline-block;
@@ -442,12 +477,12 @@ try {
 // Si no hay datos, usar demo
 if (!abonos.length) {
   abonos = [
-    { fecha:'12-ene.-26', adeudo:'8990.00', abono:'250.00', saldo:'8740.00', tipo:'historico' },
-    { fecha:'17-ene.-26', adeudo:'8740.00', abono:'170.00', saldo:'8570.00', tipo:'historico' },
-    { fecha:'25-ene.-26', adeudo:'8570.00', abono:'170.00', saldo:'8400.00', tipo:'registro'  },
-    { fecha:'31-ene.-26', adeudo:'8400.00', abono:'170.00', saldo:'8230.00', tipo:'registro'  },
-    { fecha:'07-feb.-26', adeudo:'8230.00', abono:'170.00', saldo:'8060.00', tipo:'registro'  },
-    { fecha:'14-feb.-26', adeudo:'8060.00', abono:'170.00', saldo:'7890.00', tipo:'registro'  },
+    { fecha:'12-ene.-26', adeudo:'8990.00', abono:'250.00', saldo:'8740.00', tipoAbono:'Cobranza', tipo:'historico' },
+    { fecha:'17-ene.-26', adeudo:'8740.00', abono:'170.00', saldo:'8570.00', tipoAbono:'Cobranza', tipo:'historico' },
+    { fecha:'25-ene.-26', adeudo:'8570.00', abono:'170.00', saldo:'8400.00', tipoAbono:'Anticipo', tipo:'registro'  },
+    { fecha:'31-ene.-26', adeudo:'8400.00', abono:'170.00', saldo:'8230.00', tipoAbono:'Cobranza', tipo:'registro'  },
+    { fecha:'07-feb.-26', adeudo:'8230.00', abono:'170.00', saldo:'8060.00', tipoAbono:'Bonificacion', tipo:'registro'  },
+    { fecha:'14-feb.-26', adeudo:'8060.00', abono:'170.00', saldo:'7890.00', tipoAbono:'Cobranza', tipo:'registro'  },
   ];
 }
 
@@ -468,10 +503,26 @@ const todosAbonos = abonos.sort((a, b) => {
 });
 
 function buildRows(arr, startDelay) {
-  if (!arr.length) return `<tr><td colspan="4" class="empty">Sin registros</td></tr>`;
+  if (!arr.length) return `<tr><td colspan="5" class="empty">Sin registros</td></tr>`;
+  
+  function getTipoBadge(tipo) {
+    if (!tipo) return '<span class="tipo-badge tipo-cobranza">Cobranza</span>';
+    
+    const tipoLower = tipo.toLowerCase();
+    const badges = {
+      'cobranza': '<span class="tipo-badge tipo-cobranza">Cobranza</span>',
+      'bonificacion': '<span class="tipo-badge tipo-bonificacion">Bonificación</span>',
+      'anticipo': '<span class="tipo-badge tipo-anticipo">Anticipo</span>',
+      'devolucion': '<span class="tipo-badge tipo-devolucion">Devolución</span>'
+    };
+    
+    return badges[tipoLower] || `<span class="tipo-badge tipo-cobranza">${tipo}</span>`;
+  }
+  
   return arr.map((r, i) => `
     <tr style="animation-delay:${startDelay + i * 60}ms">
       <td class="td-fecha">${formatDate(r.fecha)}</td>
+      <td class="td-tipo">${getTipoBadge(r.tipoAbono)}</td>
       <td class="td-adeudo">${fmt(r.adeudo)}</td>
       <td class="td-abono">+${fmt(r.abono)}</td>
       <td class="td-saldo"><span class="saldo-pill">${fmt(r.saldo)}</span></td>
@@ -526,6 +577,7 @@ document.getElementById('app').innerHTML = `
       <thead>
         <tr>
           <th>Fecha</th>
+          <th style="text-align:center">Tipo</th>
           <th style="text-align:right">Adeudo</th>
           <th style="text-align:right">Abono</th>
           <th style="text-align:right">Saldo</th>
