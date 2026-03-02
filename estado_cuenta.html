@@ -7,18 +7,18 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Sora:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0a0a0a;
-    --surface: #1a1a1a;
-    --surface2: #242424;
-    --border: #2d5a7b;
-    --accent: #d4a574;
-    --accent2: #2d5a7b;
-    --accent-green: #00e5a0;
-    --danger: #ff6b6b;
-    --text: #f0f0f0;
-    --muted: #8b9db8;
-    --card-shadow: 0 8px 32px rgba(0,0,0,0.5);
-  }
+  --bg: #f4f6f8;           /* fondo general claro */
+  --surface: #ffffff;      /* tarjetas */
+  --surface2: #fafafa;     /* header tabla */
+  --border: #e3e8ee;       /* bordes suaves */
+  --accent: #2f3e4d;       /* azul gris corporativo */
+  --accent2: #3b556e;      /* azul institucional */
+  --accent-green: #2e7d5b; /* verde sobrio */
+  --danger: #c44545;       /* rojo suave */
+  --text: #2b2f33;         /* texto principal */
+  --muted: #6b7280;        /* texto secundario */
+  --card-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -31,7 +31,7 @@
   }
 
   /* ── animated grid background ── */
-  body::before {
+  /*body::before {
     content: '';
     position: fixed;
     inset: 0;
@@ -41,9 +41,9 @@
     background-size: 40px 40px;
     pointer-events: none;
     z-index: 0;
-  }
+  }*/
 
-  .logo-container {
+  /*.logo-container {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -52,7 +52,7 @@
     height: 200px;
     opacity: 0.1;
     pointer-events: none;
-  }
+  }*/
 
   .logo-container img {
     width: 100%;
@@ -82,12 +82,10 @@
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 16px 16px 0 0;
-    border-bottom: 2px solid var(--accent);
-    position: relative;
-    overflow: hidden;
+    box-shadow: var(--card-shadow);
   }
 
-  .header::after {
+  /*.header::after {
     content: '';
     position: absolute;
     top: -50%;
@@ -101,7 +99,7 @@
     opacity: 0.08;
     transform: rotate(-20deg);
     pointer-events: none;
-  }
+  }*/
 
   .brand {
     font-size: 10px;
@@ -184,7 +182,8 @@
     transition: background 0.2s;
   }
 
-  .summary-card:hover { background: #20293a; }
+  /*.summary-card:hover { background: #20293a; }*/
+  .summary-card:hover { background: #f1f3f5; }
 
   .summary-label {
     font-size: 10px;
@@ -273,10 +272,13 @@
   thead th:nth-child(3),
   thead th:nth-child(4) { text-align: right; }
 
-  tbody tr {
+  /*tbody tr {
     border-bottom: 1px solid rgba(48,54,61,0.5);
     transition: background 0.15s;
     animation: rowIn 0.35s ease both;
+  }*/
+  tbody tr {
+    border-bottom: 1px solid #eef2f6;
   }
 
   @keyframes rowIn {
@@ -284,7 +286,8 @@
     to   { opacity: 1; transform: translateX(0); }
   }
 
-  tbody tr:hover { background: rgba(212,165,116,0.05); }
+  /*tbody tr:hover { background: rgba(212,165,116,0.05); }*/
+  tbody tr:hover { background: #f5f7fa; }
 
   tbody td {
     padding: 12px 16px;
@@ -311,50 +314,45 @@
   }
 
   .tipo-cobranza {
-    background: rgba(0,229,160,0.15);
+    background: #e6f4ef;
     color: var(--accent-green);
-    border: 1px solid rgba(0,229,160,0.3);
+    border: 1px solid #cde7dc;
   }
-
+  
   .tipo-bonificacion {
-    background: rgba(45,90,123,0.15);
+    background: #eef3f8;
     color: var(--accent2);
-    border: 1px solid rgba(45,90,123,0.3);
+    border: 1px solid #d7e2ed;
   }
-
+  
   .tipo-anticipo {
-    background: rgba(212,165,116,0.15);
+    background: #f4f6f8;
     color: var(--accent);
-    border: 1px solid rgba(212,165,116,0.3);
+    border: 1px solid #e3e8ee;
   }
-
+  
   .tipo-devolucion {
-    background: rgba(255,107,107,0.15);
+    background: #fdeeee;
     color: var(--danger);
-    border: 1px solid rgba(255,107,107,0.3);
+    border: 1px solid #f6d1d1;
   }
 
   .saldo-pill {
-    display: inline-block;
-    padding: 2px 10px;
-    border-radius: 20px;
-    font-size: 12px;
-    background: rgba(255,71,87,0.1);
-    border: 1px solid rgba(255,71,87,0.25);
+    background: #fdeeee;
+    border: 1px solid #f6d1d1;
     color: var(--danger);
   }
-
   /* ── FOOTER ── */
   .footer {
     background: var(--surface);
     border: 1px solid var(--border);
-    border-top: 2px solid var(--border);
+    border-top: none;
     border-radius: 0 0 16px 16px;
     padding: 20px 28px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 1px;
+    box-shadow: var(--card-shadow);
   }
 
   .footer-note {
@@ -566,8 +564,8 @@ function buildRows(arr, startDelay) {
 document.getElementById('app').innerHTML = `
   <!-- HEADER -->
   <div class="header">
-    <div class="logo-container">
-      <img src="https://i.postimg.cc/PJkb6GV4/Logo-Murbleria.png" alt="Logo">
+    <div class="-container">
+      <img src="https://i.postimg.cc/PJkb6GV4/-Murbleria.png" alt="">
     </div>
     <div>
       <div class="brand">Estado de Cuenta</div>
