@@ -5,629 +5,315 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Estado de Cuenta</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Sora:wght@300;400;600;700&display=swap" rel="stylesheet">
+
 <style>
-  :root {
-  --bg: #f4f6f8;           /* fondo general claro */
-  --surface: #ffffff;      /* tarjetas */
-  --surface2: #fafafa;     /* header tabla */
-  --border: #e3e8ee;       /* bordes suaves */
-  --accent: #2f3e4d;       /* azul gris corporativo */
-  --accent2: #3b556e;      /* azul institucional */
-  --accent-green: #2e7d5b; /* verde sobrio */
-  --danger: #c44545;       /* rojo suave */
-  --text: #2b2f33;         /* texto principal */
-  --muted: #6b7280;        /* texto secundario */
-  --card-shadow: 0 6px 18px rgba(0,0,0,0.06);
+:root {
+  --bg: #f4f6f8;
+  --surface: #ffffff;
+  --surface2: #fafafa;
+  --border: #e3e8ee;
+  --accent: #3b556e;
+  --accent-green: #2e7d5b;
+  --danger: #c44545;
+  --text: #2b2f33;
+  --muted: #6b7280;
+  --shadow: 0 6px 18px rgba(0,0,0,0.06);
 }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+* { margin:0; padding:0; box-sizing:border-box; }
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Sora', sans-serif;
-    min-height: 100vh;
-    padding: 24px 16px 48px;
-  }
+body {
+  background: var(--bg);
+  font-family: 'Sora', sans-serif;
+  color: var(--text);
+  padding: 24px 16px 48px;
+}
 
-  /* ── animated grid background ── */
-  /*body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(212,165,116,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(212,165,116,0.03) 1px, transparent 1px);
-    background-size: 40px 40px;
-    pointer-events: none;
-    z-index: 0;
-  }*/
+.container {
+  max-width: 760px;
+  margin: auto;
+}
 
-  /*.logo-container {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) rotate(-20deg);
-    width: 200px;
-    height: 200px;
-    opacity: 0.1;
-    pointer-events: none;
-  }*/
+/* HEADER */
+.header {
+  display:flex;
+  justify-content:space-between;
+  padding:28px 32px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:16px 16px 0 0;
+  box-shadow:var(--shadow);
+}
 
-  .logo-container img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
+.brand { font-size:11px; text-transform:uppercase; letter-spacing:2px; color:var(--muted); }
+.brand-name { font-size:16px; font-weight:700; margin:6px 0; color:var(--accent); }
+.folio-title { font-family:'DM Mono'; font-size:26px; }
+.cliente-name { font-size:13px; color:var(--muted); margin-top:6px; }
 
-  .container {
-    max-width: 760px;
-    margin: 0 auto;
-    position: relative;
-    z-index: 1;
-    animation: fadeUp 0.5s ease both;
-  }
+.header-right { text-align:right; }
+.fecha-label { font-size:11px; color:var(--muted); }
+.fecha-val { font-family:'DM Mono'; font-size:14px; }
 
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
+.ruta-badge {
+  margin-top:10px;
+  display:inline-block;
+  padding:4px 10px;
+  background:#eef3f8;
+  border:1px solid #d7e2ed;
+  border-radius:20px;
+  font-size:11px;
+  color:var(--accent);
+}
 
-  /* ── HEADER ── */
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding: 28px 32px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px 16px 0 0;
-    box-shadow: var(--card-shadow);
-  }
+/* SUMMARY */
+.summary-grid {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  border-left:1px solid var(--border);
+  border-right:1px solid var(--border);
+}
 
-  /*.header::after {
-    content: '';
-    position: absolute;
-    top: -50%;
-    right: -50%;
-    width: 200%;
-    height: 200%;
-    background-image: url('https://i.postimg.cc/PJkb6GV4/Logo-Murbleria.png');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    opacity: 0.08;
-    transform: rotate(-20deg);
-    pointer-events: none;
-  }*/
+.summary-card {
+  background:var(--surface);
+  padding:20px;
+  text-align:center;
+  border-top:1px solid var(--border);
+}
 
-  .brand {
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 4px;
-  }
+.summary-label {
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:2px;
+  color:var(--muted);
+  margin-bottom:8px;
+}
 
-  .brand-name {
-    font-size: 15px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    color: var(--accent2);
-    margin-bottom: 8px;
-  }
+.summary-value {
+  font-family:'DM Mono';
+  font-size:20px;
+}
 
-  .folio-title {
-    font-family: 'DM Mono', monospace;
-    font-size: 28px;
-    font-weight: 500;
-    letter-spacing: -0.5px;
-    color: var(--text);
-  }
+.summary-value.venta { color:var(--accent); }
+.summary-value.abonado { color:var(--accent-green); }
+.summary-value.saldo { color:var(--danger); }
 
-  .cliente-name {
-    font-size: 13px;
-    color: var(--muted);
-    margin-top: 6px;
-    font-weight: 300;
-    letter-spacing: 0.3px;
-  }
+/* TABLE */
+.section-header {
+  padding:18px 24px;
+  background:var(--surface);
+  border-left:1px solid var(--border);
+  border-right:1px solid var(--border);
+  border-top:1px solid var(--border);
+  font-size:12px;
+  color:var(--muted);
+  display:flex;
+  justify-content:space-between;
+}
 
-  .header-right {
-    text-align: right;
-  }
+.table-wrap {
+  border:1px solid var(--border);
+  border-top:none;
+}
 
-  .fecha-label {
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: var(--muted);
-    margin-bottom: 4px;
-  }
+table {
+  width:100%;
+  border-collapse:collapse;
+  font-size:13px;
+}
 
-  .fecha-val {
-    font-family: 'DM Mono', monospace;
-    font-size: 14px;
-    color: var(--text);
-  }
+thead th {
+  background:var(--surface2);
+  padding:12px;
+  font-size:11px;
+  color:var(--muted);
+  text-align:left;
+  border-bottom:1px solid var(--border);
+}
 
-  .ruta-badge {
-    margin-top: 10px;
-    display: inline-block;
-    padding: 3px 10px;
-    background: rgba(0,153,255,0.12);
-    border: 1px solid rgba(0,153,255,0.3);
-    border-radius: 20px;
-    font-size: 11px;
-    color: var(--accent2);
-    font-family: 'DM Mono', monospace;
-    letter-spacing: 1px;
-  }
+tbody td {
+  padding:12px;
+  border-bottom:1px solid #eef2f6;
+  font-family:'DM Mono';
+}
 
-  /* ── RESUMEN CARDS ── */
-  .summary-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1px;
-    background: var(--border);
-    border-left: 1px solid var(--border);
-    border-right: 1px solid var(--border);
-  }
+tbody tr:hover { background:#f5f7fa; }
 
-  .summary-card {
-    background: var(--surface2);
-    padding: 20px 24px;
-    text-align: center;
-    transition: background 0.2s;
-  }
+.td-adeudo, .td-abono, .td-saldo { text-align:right; }
 
-  /*.summary-card:hover { background: #20293a; }*/
-  .summary-card:hover { background: #f1f3f5; }
+.tipo-badge {
+  padding:3px 10px;
+  border-radius:12px;
+  font-size:10px;
+  font-weight:600;
+  text-transform:uppercase;
+}
 
-  .summary-label {
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: var(--muted);
-    margin-bottom: 8px;
-  }
+.tipo-cobranza {
+  background:#e6f4ef;
+  color:var(--accent-green);
+  border:1px solid #cde7dc;
+}
 
-  .summary-value {
-    font-family: 'DM Mono', monospace;
-    font-size: 20px;
-    font-weight: 500;
-  }
+.saldo-pill {
+  background:#fdeeee;
+  border:1px solid #f6d1d1;
+  color:var(--danger);
+  padding:3px 10px;
+  border-radius:20px;
+}
 
-  .summary-value.venta   { color: var(--accent2); }
-  .summary-value.abonado { color: var(--accent-green); }
-  .summary-value.saldo   { color: var(--danger); }
+/* FOOTER */
+.footer {
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-top:none;
+  border-radius:0 0 16px 16px;
+  padding:20px 28px;
+  display:flex;
+  justify-content:space-between;
+  box-shadow:var(--shadow);
+}
 
-  /* ── SECTION TITLE ── */
-  .section-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 18px 24px 14px;
-    background: var(--surface);
-    border-left: 1px solid var(--border);
-    border-right: 1px solid var(--border);
-    margin-top: 2px;
-  }
-
-  .section-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-
-  .section-dot.hist { background: var(--muted); }
-  .section-dot.curr { background: var(--accent-green); }
-
-  .section-title {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 2.5px;
-    font-weight: 600;
-    color: var(--muted);
-  }
-
-  .section-count {
-    margin-left: auto;
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    color: var(--muted);
-    background: var(--surface2);
-    padding: 2px 8px;
-    border-radius: 10px;
-    border: 1px solid var(--border);
-  }
-
-  /* ── TABLE ── */
-  .table-wrap {
-    border-left: 1px solid var(--border);
-    border-right: 1px solid var(--border);
-    overflow-x: auto;
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 13px;
-  }
-
-  thead th {
-    background: var(--surface2);
-    padding: 10px 16px;
-    text-align: left;
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    color: var(--muted);
-    font-weight: 600;
-    border-bottom: 1px solid var(--border);
-  }
-
-  thead th:last-child { text-align: right; }
-  thead th:nth-child(3),
-  thead th:nth-child(4) { text-align: right; }
-
-  /*tbody tr {
-    border-bottom: 1px solid rgba(48,54,61,0.5);
-    transition: background 0.15s;
-    animation: rowIn 0.35s ease both;
-  }*/
-  tbody tr {
-    border-bottom: 1px solid #eef2f6;
-  }
-
-  @keyframes rowIn {
-    from { opacity: 0; transform: translateX(-8px); }
-    to   { opacity: 1; transform: translateX(0); }
-  }
-
-  /*tbody tr:hover { background: rgba(212,165,116,0.05); }*/
-  tbody tr:hover { background: #f5f7fa; }
-
-  tbody td {
-    padding: 12px 16px;
-    color: var(--text);
-    font-family: 'DM Mono', monospace;
-    font-size: 12.5px;
-  }
-
-  .td-fecha { color: var(--muted); font-size: 12px; }
-
-  .td-adeudo  { text-align: right; color: var(--muted); }
-  .td-abono   { text-align: right; color: var(--accent-green); font-weight: 500; }
-  .td-saldo   { text-align: right; }
-  .td-tipo    { text-align: center; }
-
-  .tipo-badge {
-    display: inline-block;
-    padding: 3px 10px;
-    border-radius: 12px;
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-  }
-
-  .tipo-cobranza {
-    background: #e6f4ef;
-    color: var(--accent-green);
-    border: 1px solid #cde7dc;
-  }
-  
-  .tipo-bonificacion {
-    background: #eef3f8;
-    color: var(--accent2);
-    border: 1px solid #d7e2ed;
-  }
-  
-  .tipo-anticipo {
-    background: #f4f6f8;
-    color: var(--accent);
-    border: 1px solid #e3e8ee;
-  }
-  
-  .tipo-devolucion {
-    background: #fdeeee;
-    color: var(--danger);
-    border: 1px solid #f6d1d1;
-  }
-
-  .saldo-pill {
-    background: #fdeeee;
-    border: 1px solid #f6d1d1;
-    color: var(--danger);
-  }
-  /* ── FOOTER ── */
-  .footer {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-top: none;
-    border-radius: 0 0 16px 16px;
-    padding: 20px 28px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: var(--card-shadow);
-  }
-
-  .footer-note {
-    font-size: 11px;
-    color: var(--muted);
-    letter-spacing: 0.3px;
-  }
-
-  .saldo-final-label {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: var(--muted);
-    margin-bottom: 4px;
-    text-align: right;
-  }
-
-  .saldo-final-val {
-    font-family: 'DM Mono', monospace;
-    font-size: 22px;
-    font-weight: 500;
-    color: var(--danger);
-    text-align: right;
-  }
-
-  /* ── EMPTY STATE ── */
-  .empty {
-    padding: 32px;
-    text-align: center;
-    color: var(--muted);
-    font-size: 13px;
-    font-style: italic;
-  }
+.saldo-final-val {
+  font-family:'DM Mono';
+  font-size:22px;
+  color:var(--danger);
+}
 </style>
 </head>
+
 <body>
-<div class="container" id="app">
-  <!-- Renderizado por JS desde parámetros URL -->
-</div>
+<div class="container" id="app"></div>
 
 <script>
-// ─────────────────────────────────────────────────────────
-// LECTURA DE PARÁMETROS DE LA URL
-// AppSheet pasará estos parámetros al abrir la URL:
-//   folio, cliente, ruta, sucursal, fechaVenta, importeVenta,
-//   dia, localidad, abonos (JSON codificado)
-// ─────────────────────────────────────────────────────────
-function getParam(name) {
-  const url = new URL(window.location.href);
-  return decodeURIComponent(url.searchParams.get(name) || '');
-}
 
-function formatDate(dateStr) {
-  // Si ya viene en formato correcto (DD-MMM-YYYY o similar), devolverlo
-  if (!dateStr) return dateStr;
-  
-  // Intentar parsear diferentes formatos
-  let date;
-  
-  // Formato MM/DD/YYYY o DD/MM/YYYY
-  if (dateStr.includes('/')) {
-    const parts = dateStr.split('/');
-    date = new Date(parts[2], parts[0] - 1, parts[1]);
+/* ========= PARSER ROBUSTO UNIVERSAL ========= */
+function parseNum(raw) {
+  if (raw == null) return 0;
+  let s = String(raw).trim();
+  s = s.replace(/[^\d.,-]/g, '');
+
+  const lastDot = s.lastIndexOf('.');
+  const lastComma = s.lastIndexOf(',');
+
+  if (lastDot > -1 && lastComma > -1) {
+    if (lastComma > lastDot) {
+      s = s.replace(/\./g, '').replace(/,/g, '.');
+    } else {
+      s = s.replace(/,/g, '');
+    }
+  } else if (lastComma > -1) {
+    s = s.replace(/\./g, '').replace(/,/g, '.');
+  } else {
+    s = s.replace(/,/g, '');
   }
-  // Formato YYYY-MM-DD
-  else if (dateStr.includes('-') && dateStr.length === 10) {
-    date = new Date(dateStr);
-  }
-  // Ya viene formateado
-  else {
-    return dateStr;
-  }
-  
-  if (isNaN(date.getTime())) return dateStr;
-  
-  const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 
-                  'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
-  
-  const day = String(date.getDate()).padStart(2, '0');
-  const month = months[date.getMonth()];
-  const year = date.getFullYear();
-  
-  return `${day}-${month}-${year}`;
+
+  const n = Number(s);
+  return Number.isFinite(n) ? n : 0;
 }
 
 function fmt(val) {
-  // Limpiar el valor: remover $, comas y espacios
-  const cleaned = String(val).replace(/[\$,\s]/g, '');
-  const n = parseFloat(cleaned);
-  if (isNaN(n)) return val;
-  return '$' + n.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const n = parseNum(val);
+  return n.toLocaleString('es-MX', {
+    style:'currency',
+    currency:'MXN',
+    minimumFractionDigits:2
+  });
 }
 
-function parseNum(val) {
-  // Función auxiliar para convertir valores con $ y comas a número
-  const cleaned = String(val).replace(/[\$,\s]/g, '');
-  const n = parseFloat(cleaned);
-  return isNaN(n) ? 0 : n;
+/* ========= URL PARAMS ========= */
+function getParam(name){
+  const url=new URL(window.location.href);
+  return decodeURIComponent(url.searchParams.get(name)||'');
 }
 
-// ── DATOS (vendrán por URL en producción) ──
-// Para prueba/demo se usan valores de ejemplo si no hay params
-const folio       = getParam('folio')       || 'M6-000067';
-const cliente     = getParam('cliente')     || 'GALLARDO ROMERO ALMA DELIA';
-const ruta        = getParam('ruta')        || 'RUTA11';
-const sucursal    = getParam('sucursal')    || 'MAZATLAN';
-const fechaVenta  = getParam('fechaVenta')  || '11/01/2026';
-const importeVenta= getParam('importeVenta')|| '8990';
-const localidad   = getParam('localidad')  || 'MONTUOSA';
+const folio = getParam('folio');
+const cliente = getParam('cliente');
+const ruta = getParam('ruta');
+const sucursal = getParam('sucursal');
+const fechaVenta = getParam('fechaVenta');
+const importeVenta = getParam('importeVenta');
+const localidad = getParam('localidad');
 
-// Abonos históricos (JSON array)
-// Cada abono: { fecha, adeudo, abono, saldo, tipo }
-// tipo: "historico" | "registro"
-let abonos = [];
-try {
-  const raw = getParam('abonos');
-  if (raw) abonos = JSON.parse(raw);
-} catch(e) {}
+let abonos=[];
+try{
+  const raw=getParam('abonos');
+  if(raw) abonos=JSON.parse(raw);
+}catch(e){}
 
-// Si no hay datos, usar demo
-if (!abonos.length) {
-  abonos = [
-    { fecha:'12-ene.-26', adeudo:'8990.00', abono:'250.00', saldo:'8740.00', tipoAbono:'Cobranza', tipo:'historico' },
-    { fecha:'17-ene.-26', adeudo:'8740.00', abono:'170.00', saldo:'8570.00', tipoAbono:'Cobranza', tipo:'historico' },
-    { fecha:'25-ene.-26', adeudo:'8570.00', abono:'170.00', saldo:'8400.00', tipoAbono:'Anticipo', tipo:'registro'  },
-    { fecha:'31-ene.-26', adeudo:'8400.00', abono:'170.00', saldo:'8230.00', tipoAbono:'Cobranza', tipo:'registro'  },
-    { fecha:'07-feb.-26', adeudo:'8230.00', abono:'170.00', saldo:'8060.00', tipoAbono:'Bonificacion', tipo:'registro'  },
-    { fecha:'14-feb.-26', adeudo:'8060.00', abono:'170.00', saldo:'7890.00', tipoAbono:'Cobranza', tipo:'registro'  },
-  ];
-}
+/* ========= CÁLCULOS ========= */
+const importeVentaNum=parseNum(importeVenta);
+const totalAbonado=abonos.reduce((s,r)=>s+parseNum(r.abono),0);
+const saldoActual=importeVentaNum-totalAbonado;
 
-// ── CÁLCULOS ──
-const importeVentaNum = parseNum(importeVenta);
-const totalAbonado = abonos.reduce((s, r) => s + parseNum(r.abono), 0);
-
-// Calcular saldo actual correctamente: Importe Venta - Total Abonado
-const saldoActual = importeVentaNum - totalAbonado;
-
-// Ordenar todos los abonos por fecha (más antiguos primero)
-const todosAbonos = abonos.sort((a, b) => {
-  // Parsear fechas en formato DD-MMM-YY
-  function parseCustomDate(dateStr) {
-    if (!dateStr) return new Date(0);
-    
-    // Si viene en formato MM/DD/YYYY
-    if (dateStr.includes('/')) {
-      const parts = dateStr.split('/');
-      return new Date(parts[2], parts[0] - 1, parts[1]);
-    }
-    
-    // Si viene en formato DD-MMM-YY (ej: 19-oct.-25)
-    const months = {
-      'ene': 0, 'feb': 1, 'mar': 2, 'abr': 3, 'may': 4, 'jun': 5,
-      'jul': 6, 'ago': 7, 'sep': 8, 'oct': 9, 'nov': 10, 'dic': 11
-    };
-    
-    const parts = dateStr.toLowerCase().replace(/\./g, '').split('-');
-    if (parts.length === 3) {
-      const day = parseInt(parts[0]);
-      const month = months[parts[1]];
-      const year = parseInt(parts[2]) + 2000; // Asume 20XX
-      return new Date(year, month, day);
-    }
-    
-    return new Date(dateStr);
-  }
-  
-  const dateA = parseCustomDate(a.fecha);
-  const dateB = parseCustomDate(b.fecha);
-  return dateA - dateB; // Antiguos primero
-});
-
-// Debug: mostrar datos en consola (después de todas las declaraciones)
-console.log('Abonos recibidos:', abonos);
-console.log('Importe Venta:', importeVenta, '=', importeVentaNum);
-console.log('Total Abonado:', totalAbonado);
-console.log('Saldo Calculado:', saldoActual);
-console.log('Abonos ordenados:', todosAbonos);
-
-function buildRows(arr, startDelay) {
-  if (!arr.length) return `<tr><td colspan="5" class="empty">Sin registros</td></tr>`;
-  
-  function getTipoBadge(tipo) {
-    if (!tipo) return '<span class="tipo-badge tipo-cobranza">Cobranza</span>';
-    
-    const tipoLower = tipo.toLowerCase();
-    const badges = {
-      'cobranza': '<span class="tipo-badge tipo-cobranza">Cobranza</span>',
-      'bonificacion': '<span class="tipo-badge tipo-bonificacion">Bonificación</span>',
-      'anticipo': '<span class="tipo-badge tipo-anticipo">Anticipo</span>',
-      'devolucion': '<span class="tipo-badge tipo-devolucion">Devolución</span>'
-    };
-    
-    return badges[tipoLower] || `<span class="tipo-badge tipo-cobranza">${tipo}</span>`;
-  }
-  
-  return arr.map((r, i) => `
-    <tr style="animation-delay:${startDelay + i * 60}ms">
-      <td class="td-fecha">${formatDate(r.fecha)}</td>
-      <td class="td-tipo">${getTipoBadge(r.tipoAbono)}</td>
-      <td class="td-adeudo">${fmt(r.adeudo)}</td>
-      <td class="td-abono">+${fmt(r.abono)}</td>
-      <td class="td-saldo"><span class="saldo-pill">${fmt(r.saldo)}</span></td>
-    </tr>
-  `).join('');
-}
-
-// ── RENDER ──
-document.getElementById('app').innerHTML = `
-  <!-- HEADER -->
-  <div class="header">
-    <div class="-container">
-      <img src="https://i.postimg.cc/PJkb6GV4/-Murbleria.png" alt="">
-    </div>
-    <div>
-      <div class="brand">Estado de Cuenta</div>
-      <div class="brand-name">MUEBLERÍA ADRIANA</div>
-      <div class="folio-title">${folio}</div>
-      <div class="cliente-name">${cliente} · ${localidad}</div>
-    </div>
-    <div class="header-right">
-      <div class="fecha-label">Fecha de venta</div>
-      <div class="fecha-val">${formatDate(fechaVenta)}</div>
-      <div class="ruta-badge">${ruta} / ${sucursal}</div>
-    </div>
+/* ========= RENDER ========= */
+document.getElementById('app').innerHTML=`
+<div class="header">
+  <div>
+    <div class="brand">Estado de Cuenta</div>
+    <div class="brand-name">MUEBLERÍA ADRIANA</div>
+    <div class="folio-title">${folio}</div>
+    <div class="cliente-name">${cliente} · ${localidad}</div>
   </div>
+  <div class="header-right">
+    <div class="fecha-label">Fecha de Venta</div>
+    <div class="fecha-val">${fechaVenta}</div>
+    <div class="ruta-badge">${ruta} / ${sucursal}</div>
+  </div>
+</div>
 
-  <!-- RESUMEN -->
-  <div class="summary-grid">
-    <div class="summary-card">
-      <div class="summary-label">Importe Venta</div>
-      <div class="summary-value venta">${fmt(importeVenta)}</div>
-    </div>
-    <div class="summary-card">
-      <div class="summary-label">Total Abonado</div>
-      <div class="summary-value abonado">${fmt(totalAbonado)}</div>
-    </div>
-    <div class="summary-card">
-      <div class="summary-label">Saldo Actual</div>
-      <div class="summary-value saldo">${fmt(saldoActual)}</div>
-    </div>
+<div class="summary-grid">
+  <div class="summary-card">
+    <div class="summary-label">Importe Venta</div>
+    <div class="summary-value venta">${fmt(importeVenta)}</div>
   </div>
+  <div class="summary-card">
+    <div class="summary-label">Total Abonado</div>
+    <div class="summary-value abonado">${fmt(totalAbonado)}</div>
+  </div>
+  <div class="summary-card">
+    <div class="summary-label">Saldo Actual</div>
+    <div class="summary-value saldo">${fmt(saldoActual)}</div>
+  </div>
+</div>
 
-  <!-- TABLA UNIFICADA -->
-  <div class="section-header">
-    <div class="section-dot curr"></div>
-    <div class="section-title">Registros de Cobranza</div>
-    <div class="section-count">${todosAbonos.length} pagos</div>
-  </div>
-  <div class="table-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th>Fecha</th>
-          <th style="text-align:center">Tipo</th>
-          <th style="text-align:right">Adeudo</th>
-          <th style="text-align:right">Abono</th>
-          <th style="text-align:right">Saldo</th>
-        </tr>
-      </thead>
-      <tbody>${buildRows(todosAbonos, 100)}</tbody>
-    </table>
-  </div>
+<div class="section-header">
+  <div>Registros de Cobranza</div>
+  <div>${abonos.length} pagos</div>
+</div>
 
-  <!-- FOOTER -->
-  <div class="footer">
-    <div class="footer-note">
-      Generado automáticamente<br>
-      <span style="font-family:'DM Mono',monospace;font-size:10px;opacity:.6">${formatDate(new Date().toLocaleDateString('es-MX', {day:'2-digit',month:'2-digit',year:'numeric'}))}</span>
-    </div>
-    <div>
-      <div class="saldo-final-label">Saldo Pendiente</div>
-      <div class="saldo-final-val">${fmt(saldoActual)}</div>
-    </div>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Tipo</th>
+<th>Adeudo</th>
+<th>Abono</th>
+<th>Saldo</th>
+</tr>
+</thead>
+<tbody>
+${abonos.map(r=>`
+<tr>
+<td>${r.fecha}</td>
+<td><span class="tipo-badge tipo-cobranza">${r.tipoAbono||'Cobranza'}</span></td>
+<td class="td-adeudo">${fmt(r.adeudo)}</td>
+<td class="td-abono">+${fmt(r.abono)}</td>
+<td class="td-saldo"><span class="saldo-pill">${fmt(r.saldo)}</span></td>
+</tr>
+`).join('')}
+</tbody>
+</table>
+</div>
+
+<div class="footer">
+  <div>Generado automáticamente</div>
+  <div>
+    <div>Saldo Pendiente</div>
+    <div class="saldo-final-val">${fmt(saldoActual)}</div>
   </div>
+</div>
 `;
 </script>
 </body>
