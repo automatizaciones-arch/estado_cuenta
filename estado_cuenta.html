@@ -8,22 +8,16 @@
 
 <style>
   :root{
-    /* Light, sobrio, corporativo */
     --bg:#eef2f6;
     --surface:#f8fafc;
     --surface2:#f1f5f9;
-
     --border:#d8e0ea;
-
-    /* acentos sobrios (nada neón) */
-    --accent:#8a6b3f;         /* dorado sobrio */
-    --accent2:#2f5b7a;        /* azul institucional */
-    --accent-green:#2e7d5b;   /* verde sobrio */
-    --danger:#c04a4a;         /* rojo sobrio */
-
+    --accent:#8a6b3f;
+    --accent2:#2f5b7a;
+    --accent-green:#2e7d5b;
+    --danger:#c04a4a;
     --text:#1f2933;
     --muted:#637182;
-
     --card-shadow:0 10px 30px rgba(16,24,40,0.08);
   }
 
@@ -37,7 +31,6 @@
     padding:24px 16px 48px;
   }
 
-  /* ── subtle grid background (más claro) ── */
   body::before{
     content:'';
     position:fixed;
@@ -78,14 +71,11 @@
     box-shadow:var(--card-shadow);
   }
 
-  /* watermark logo (conservado) */
   .header::after{
     content:'';
     position:absolute;
-    top:-55%;
-    right:-55%;
-    width:210%;
-    height:210%;
+    top:-55%;right:-55%;
+    width:210%;height:210%;
     background-image:url('https://i.postimg.cc/PJkb6GV4/Logo-Murbleria.png');
     background-size:contain;
     background-repeat:no-repeat;
@@ -95,184 +85,83 @@
     pointer-events:none;
   }
 
-  /* logo centrado sutil (conservado) */
   .logo-container{
-    position:absolute;
-    top:50%;
-    left:50%;
+    position:absolute;top:50%;left:50%;
     transform:translate(-50%,-50%) rotate(-20deg);
-    width:200px;height:200px;
-    opacity:0.08;
-    pointer-events:none;
+    width:200px;height:200px;opacity:0.08;pointer-events:none;
   }
   .logo-container img{width:100%;height:100%;object-fit:contain;}
 
-  .brand{
-    font-size:10px;
-    font-weight:700;
-    letter-spacing:3px;
-    text-transform:uppercase;
-    color:var(--accent);
-    margin-bottom:4px;
-  }
-  .brand-name{
-    font-size:15px;
-    font-weight:800;
-    letter-spacing:1px;
-    color:var(--accent2);
-    margin-bottom:8px;
-  }
-  .folio-title{
-    font-family:'DM Mono',monospace;
-    font-size:28px;
-    font-weight:700; /* antes 500 */
-  }
-  .cliente-name{
-    font-size:13px;
-    color:var(--muted);
-    margin-top:6px;
-    font-weight:400;
-    letter-spacing:0.2px;
-  }
+  .brand{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:4px;}
+  .brand-name{font-size:15px;font-weight:800;letter-spacing:1px;color:var(--accent2);margin-bottom:8px;}
+  .folio-title{font-family:'DM Mono',monospace;font-size:28px;font-weight:700;}
+  .cliente-name{font-size:13px;color:var(--muted);margin-top:6px;font-weight:400;letter-spacing:0.2px;}
 
   .header-right{text-align:right;}
-  .fecha-label{
-    font-size:10px;
-    text-transform:uppercase;
-    letter-spacing:2px;
-    color:var(--muted);
-    margin-bottom:4px;
-  }
-  .fecha-val{
-    font-family:'DM Mono',monospace;
-    font-size:14px;
-    color:var(--text);
-  }
+  .fecha-label{font-size:10px;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-bottom:4px;}
+  .fecha-val{font-family:'DM Mono',monospace;font-size:14px;color:var(--text);}
 
   .ruta-badge{
-    margin-top:10px;
-    display:inline-block;
-    padding:3px 10px;
-    background:rgba(47,91,122,0.08);
-    border:1px solid rgba(47,91,122,0.22);
-    border-radius:20px;
-    font-size:11px;
-    color:var(--accent2);
-    font-family:'DM Mono',monospace;
-    letter-spacing:1px;
+    margin-top:10px;display:inline-block;padding:3px 10px;
+    background:rgba(47,91,122,0.08);border:1px solid rgba(47,91,122,0.22);
+    border-radius:20px;font-size:11px;color:var(--accent2);
+    font-family:'DM Mono',monospace;letter-spacing:1px;
   }
 
   /* ── RESUMEN CARDS ── */
   .summary-grid{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:1px;
-    background:var(--border);
-    border-left:1px solid var(--border);
-    border-right:1px solid var(--border);
+    display:grid;grid-template-columns:repeat(3,1fr);
+    gap:1px;background:var(--border);
+    border-left:1px solid var(--border);border-right:1px solid var(--border);
   }
 
-  .summary-card{
-    background:var(--surface2);
-    padding:20px 24px;
-    text-align:center;
-    transition:background .2s;
-  }
+  .summary-card{background:var(--surface2);padding:20px 24px;text-align:center;transition:background .2s;}
   .summary-card:hover{background:#eef2f6;}
 
-  .summary-label{
-    font-size:10px;
-    text-transform:uppercase;
-    letter-spacing:2px;
-    color:var(--muted);
-    margin-bottom:8px;
-  }
-  .summary-value{
-    font-family:'DM Mono',monospace;
-    font-size:21px;   /* antes 20 */
-    font-weight:800;  /* antes 600 */
-  }
+  .summary-label{font-size:10px;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-bottom:8px;}
+  .summary-value{font-family:'DM Mono',monospace;font-size:21px;font-weight:800;}
   .summary-value.venta{color:var(--accent2);}
   .summary-value.abonado{color:var(--accent-green);}
   .summary-value.saldo{color:var(--danger);}
 
   /* ── SECTION TITLE ── */
   .section-header{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    padding:18px 24px 14px;
-    background:var(--surface);
-    border-left:1px solid var(--border);
-    border-right:1px solid var(--border);
-    margin-top:2px;
+    display:flex;align-items:center;gap:10px;
+    padding:18px 24px 14px;background:var(--surface);
+    border-left:1px solid var(--border);border-right:1px solid var(--border);margin-top:2px;
   }
 
-  .section-dot{
-    width:8px;height:8px;border-radius:50%;
-    flex-shrink:0;
-  }
+  .section-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
   .section-dot.curr{background:var(--accent-green);}
-  .section-title{
-    font-size:11px;
-    text-transform:uppercase;
-    letter-spacing:2.5px;
-    font-weight:700;
-    color:var(--muted);
-  }
+  .section-title{font-size:11px;text-transform:uppercase;letter-spacing:2.5px;font-weight:700;color:var(--muted);}
   .section-count{
-    margin-left:auto;
-    font-family:'DM Mono',monospace;
-    font-size:11px;
-    color:var(--muted);
-    background:var(--surface2);
-    padding:2px 8px;
-    border-radius:10px;
-    border:1px solid var(--border);
+    margin-left:auto;font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);
+    background:var(--surface2);padding:2px 8px;border-radius:10px;border:1px solid var(--border);
   }
 
   /* ── TABLE ── */
   .table-wrap{
-    border-left:1px solid var(--border);
-    border-right:1px solid var(--border);
-    overflow-x:auto;
-    background:var(--surface);
+    border-left:1px solid var(--border);border-right:1px solid var(--border);
+    overflow-x:auto;background:var(--surface);
   }
 
   table{width:100%;border-collapse:collapse;font-size:13px;}
   thead th{
-    background:var(--surface2);
-    padding:10px 16px;
-    text-align:left;
-    font-size:10px;
-    text-transform:uppercase;
-    letter-spacing:1.5px;
-    color:var(--muted);
-    font-weight:700;
-    border-bottom:1px solid var(--border);
+    background:var(--surface2);padding:10px 16px;text-align:left;
+    font-size:10px;text-transform:uppercase;letter-spacing:1.5px;
+    color:var(--muted);font-weight:700;border-bottom:1px solid var(--border);
   }
   thead th:last-child{text-align:right;}
-  thead th:nth-child(3),
-  thead th:nth-child(4){text-align:right;}
+  thead th:nth-child(3),thead th:nth-child(4){text-align:right;}
 
   tbody tr{
     border-bottom:1px solid rgba(216,224,234,0.9);
-    transition:background .15s;
-    animation:rowIn .35s ease both;
+    transition:background .15s;animation:rowIn .35s ease both;
   }
-  @keyframes rowIn{
-    from{opacity:0;transform:translateX(-8px);}
-    to{opacity:1;transform:translateX(0);}
-  }
+  @keyframes rowIn{from{opacity:0;transform:translateX(-8px);}to{opacity:1;transform:translateX(0);}}
   tbody tr:hover{background:rgba(47,91,122,0.05);}
 
-  tbody td{
-    padding:12px 16px;
-    color:var(--text);
-    font-family:'DM Mono',monospace;
-    font-size:13px;     /* antes 12.5 */
-    font-weight:650;    /* truco: algunos browsers lo redondean a 700 */
-  }
+  tbody td{padding:12px 16px;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;font-weight:650;}
 
   .td-fecha{color:var(--muted);font-size:12px;}
   .td-adeudo{text-align:right;color:var(--muted);}
@@ -281,44 +170,17 @@
   .td-tipo{text-align:center;}
 
   .tipo-badge{
-    display:inline-block;
-    padding:3px 10px;
-    border-radius:12px;
-    font-size:10px;
-    font-weight:700;
-    letter-spacing:.5px;
-    text-transform:uppercase;
+    display:inline-block;padding:3px 10px;border-radius:12px;
+    font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;
   }
-
-  .tipo-cobranza{
-    background:rgba(46,125,91,0.12);
-    color:var(--accent-green);
-    border:1px solid rgba(46,125,91,0.22);
-  }
-  .tipo-bonificacion{
-    background:rgba(47,91,122,0.10);
-    color:var(--accent2);
-    border:1px solid rgba(47,91,122,0.22);
-  }
-  .tipo-anticipo{
-    background:rgba(138,107,63,0.12);
-    color:var(--accent);
-    border:1px solid rgba(138,107,63,0.22);
-  }
-  .tipo-devolucion{
-    background:rgba(192,74,74,0.12);
-    color:var(--danger);
-    border:1px solid rgba(192,74,74,0.22);
-  }
+  .tipo-cobranza{background:rgba(46,125,91,0.12);color:var(--accent-green);border:1px solid rgba(46,125,91,0.22);}
+  .tipo-bonificacion{background:rgba(47,91,122,0.10);color:var(--accent2);border:1px solid rgba(47,91,122,0.22);}
+  .tipo-anticipo{background:rgba(138,107,63,0.12);color:var(--accent);border:1px solid rgba(138,107,63,0.22);}
+  .tipo-devolucion{background:rgba(192,74,74,0.12);color:var(--danger);border:1px solid rgba(192,74,74,0.22);}
 
   .saldo-pill{
-    display:inline-block;
-    padding:3px 10px;
-    border-radius:20px;
-    font-size:12.5px;
-    background:rgba(192,74,74,0.10);
-    border:1px solid rgba(192,74,74,0.20);
-    color:var(--danger);
+    display:inline-block;padding:3px 10px;border-radius:20px;font-size:12.5px;
+    background:rgba(192,74,74,0.10);border:1px solid rgba(192,74,74,0.20);color:var(--danger);
   }
 
   /* ── FOOTER ── */
@@ -335,72 +197,83 @@
     box-shadow:var(--card-shadow);
   }
 
-  .footer-note{
-    font-size:11px;
-    color:var(--muted);
-    letter-spacing:.3px;
-  }
-  .saldo-final-label{
-    font-size:11px;
-    text-transform:uppercase;
-    letter-spacing:2px;
-    color:var(--muted);
-    margin-bottom:4px;
-    text-align:right;
-  }
-  .saldo-final-val{
-    font-family:'DM Mono',monospace;
-    font-size:24px;   /* antes 22 */
-    font-weight:900;  /* antes 700 */
+  .footer-note{font-size:11px;color:var(--muted);letter-spacing:.3px;}
+  .saldo-final-label{font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-bottom:4px;text-align:right;}
+  .saldo-final-val{font-family:'DM Mono',monospace;font-size:24px;font-weight:900;}
+
+  .empty{padding:32px;text-align:center;color:var(--muted);font-size:13px;font-style:italic;}
+
+  /* ── BOTONES DE ACCIÓN ── */
+  .action-bar{
+    display:flex;
+    gap:12px;
+    padding:16px 28px;
+    background:var(--surface);
+    border-left:1px solid var(--border);
+    border-right:1px solid var(--border);
+    border-bottom:1px solid var(--border);
+    margin-top:1px;
   }
 
-  .empty{
-    padding:32px;
-    text-align:center;
-    color:var(--muted);
-    font-size:13px;
-    font-style:italic;
-  }
-
-  /* ── LOADING overlay (animación de carga) ── */
-  .loading{
-    position:fixed;
-    inset:0;
+  .btn-action{
+    flex:1;
     display:flex;
     align-items:center;
     justify-content:center;
-    background:rgba(243,245,248,0.82);
-    backdrop-filter: blur(6px);
-    z-index:9999;
+    gap:8px;
+    padding:12px 16px;
+    border:none;
+    border-radius:10px;
+    font-family:'Sora',sans-serif;
+    font-size:13px;
+    font-weight:600;
+    cursor:pointer;
+    transition:all .2s;
+    letter-spacing:.3px;
+  }
+
+  .btn-print{
+    background:var(--surface2);
+    color:var(--accent2);
+    border:1.5px solid var(--border);
+  }
+  .btn-print:hover{background:var(--border);}
+
+  .btn-whatsapp{
+    background:#25D366;
+    color:white;
+    box-shadow:0 4px 14px rgba(37,211,102,0.35);
+  }
+  .btn-whatsapp:hover{background:#1ebe5d;box-shadow:0 6px 20px rgba(37,211,102,0.5);transform:translateY(-1px);}
+
+  /* ── LOADING ── */
+  .loading{
+    position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+    background:rgba(243,245,248,0.82);backdrop-filter:blur(6px);z-index:9999;
   }
   .loader-card{
-    background:var(--surface);
-    border:1px solid var(--border);
-    box-shadow:var(--card-shadow);
-    border-radius:16px;
-    padding:18px 22px;
-    display:flex;
-    gap:12px;
-    align-items:center;
+    background:var(--surface);border:1px solid var(--border);box-shadow:var(--card-shadow);
+    border-radius:16px;padding:18px 22px;display:flex;gap:12px;align-items:center;
   }
   .spinner{
     width:18px;height:18px;border-radius:50%;
-    border:2px solid rgba(47,91,122,0.20);
-    border-top-color: rgba(47,91,122,0.70);
+    border:2px solid rgba(47,91,122,0.20);border-top-color:rgba(47,91,122,0.70);
     animation:spin .8s linear infinite;
   }
   @keyframes spin{to{transform:rotate(360deg);}}
-  .loading-text{
-    font-size:12px;
-    color:var(--muted);
-    letter-spacing:.3px;
+  .loading-text{font-size:12px;color:var(--muted);letter-spacing:.3px;}
+
+  /* ── PRINT ── */
+  @media print{
+    body{background:white;padding:0;}
+    .action-bar{display:none;}
+    body::before{display:none;}
   }
 </style>
 </head>
 
 <body>
 
-<!-- Loading overlay -->
 <div class="loading" id="loading">
   <div class="loader-card">
     <div class="spinner"></div>
@@ -408,50 +281,28 @@
   </div>
 </div>
 
-<div class="container" id="app">
-  <!-- Renderizado por JS -->
-</div>
+<div class="container" id="app"></div>
 
 <script>
-/* ─────────────────────────────────────────
-   URL params
-───────────────────────────────────────── */
 function getParam(name){
   const url = new URL(window.location.href);
   return decodeURIComponent(url.searchParams.get(name) || '');
 }
 
-/* ─────────────────────────────────────────
-   Parse/format dinero ROBUSTO (ES/US)
-   Acepta: 3.690,00 | 3,690.00 | $2,990.00 | 2990 | 2990.00
-───────────────────────────────────────── */
 function parseNum(raw){
   if (raw == null) return 0;
   let s = String(raw).trim();
-
-  // deja solo números, coma, punto y signo
   s = s.replace(/[^\d.,-]/g, '');
-
   const lastDot = s.lastIndexOf('.');
   const lastComma = s.lastIndexOf(',');
-
   if (lastDot > -1 && lastComma > -1){
-    // el separador decimal es el último que aparece
-    if (lastComma > lastDot){
-      // ES: 3.690,00
-      s = s.replace(/\./g,'').replace(/,/g,'.');
-    } else {
-      // US: 3,690.00
-      s = s.replace(/,/g,'');
-    }
+    if (lastComma > lastDot){ s = s.replace(/\./g,'').replace(/,/g,'.'); }
+    else { s = s.replace(/,/g,''); }
   } else if (lastComma > -1){
-    // solo coma => coma decimal
     s = s.replace(/\./g,'').replace(/,/g,'.');
   } else {
-    // solo punto o nada
     s = s.replace(/,/g,'');
   }
-
   const n = Number(s);
   return Number.isFinite(n) ? n : 0;
 }
@@ -461,51 +312,31 @@ function fmt(val){
   return n.toLocaleString('es-MX', { style:'currency', currency:'MXN', minimumFractionDigits:2, maximumFractionDigits:2 });
 }
 
-/* ─────────────────────────────────────────
-   Fechas
-───────────────────────────────────────── */
 function formatDate(dateStr){
   if (!dateStr) return dateStr;
   let date;
-
-  // detecta DD/MM/YYYY o MM/DD/YYYY (no perfecto, pero sirve)
   if (dateStr.includes('/')){
     const parts = dateStr.split('/');
-    // si el primer pedazo > 12, asumimos DD/MM/YYYY
     const a = parseInt(parts[0],10);
-    if (a > 12){
-      date = new Date(parts[2], parts[1]-1, parts[0]);
-    } else {
-      // por compatibilidad con tu versión original
-      date = new Date(parts[2], parts[0]-1, parts[1]);
-    }
+    if (a > 12){ date = new Date(parts[2], parts[1]-1, parts[0]); }
+    else { date = new Date(parts[2], parts[0]-1, parts[1]); }
   } else if (dateStr.includes('-') && dateStr.length === 10){
     date = new Date(dateStr);
-  } else {
-    return dateStr;
-  }
-
+  } else { return dateStr; }
   if (isNaN(date.getTime())) return dateStr;
-
   const months = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
   const day = String(date.getDate()).padStart(2,'0');
-  const month = months[date.getMonth()];
-  const year = date.getFullYear();
-  return `${day}-${month}-${year}`;
+  return `${day}-${months[date.getMonth()]}-${date.getFullYear()}`;
 }
 
-/* parsea fechas tipo 05-nov.-25, 03-ene-26, etc. */
 function parseCustomDate(dateStr){
   if (!dateStr) return new Date(0);
-
   if (dateStr.includes('/')){
     const p = dateStr.split('/');
-    // mismo criterio: si p[0] > 12 => DD/MM/YYYY
     const a = parseInt(p[0],10);
     if (a > 12) return new Date(p[2], p[1]-1, p[0]);
     return new Date(p[2], p[0]-1, p[1]);
   }
-
   const months = {ene:0,feb:1,mar:2,abr:3,may:4,jun:5,jul:6,ago:7,sep:8,oct:9,nov:10,dic:11};
   const parts = dateStr.toLowerCase().replace(/\./g,'').split('-');
   if (parts.length === 3){
@@ -520,9 +351,7 @@ function parseCustomDate(dateStr){
   return isNaN(d.getTime()) ? new Date(0) : d;
 }
 
-/* ─────────────────────────────────────────
-   Datos (desde URL)
-───────────────────────────────────────── */
+/* ── Parámetros ── */
 const folio        = getParam('folio')        || 'M6-000067';
 const cliente      = getParam('cliente')      || 'GALLARDO ROMERO ALMA DELIA';
 const ruta         = getParam('ruta')         || 'RUTA11';
@@ -530,6 +359,7 @@ const sucursal     = getParam('sucursal')     || 'MAZATLAN';
 const fechaVenta   = getParam('fechaVenta')   || '11/01/2026';
 const importeVenta = getParam('importeVenta') || '8990';
 const localidad    = getParam('localidad')    || 'MONTUOSA';
+const celular      = getParam('celular')      || '';
 
 let abonos = [];
 try{
@@ -537,7 +367,6 @@ try{
   if (raw) abonos = JSON.parse(raw);
 }catch(e){}
 
-/* demo si no hay datos */
 if(!abonos.length){
   abonos = [
     { fecha:'12-ene.-26', adeudo:'8990.00', abono:'250.00', saldo:'8740.00', tipoAbono:'Cobranza', tipo:'historico' },
@@ -549,19 +378,12 @@ if(!abonos.length){
   ];
 }
 
-/* ─────────────────────────────────────────
-   Cálculos
-───────────────────────────────────────── */
 const importeVentaNum = parseNum(importeVenta);
 const totalAbonado    = abonos.reduce((s,r)=> s + parseNum(r.abono), 0);
 const saldoActual     = importeVentaNum - totalAbonado;
 
-/* ordenar antiguos primero (conservado) */
 const todosAbonos = [...abonos].sort((a,b)=> parseCustomDate(a.fecha) - parseCustomDate(b.fecha));
 
-/* ─────────────────────────────────────────
-   UI helpers
-───────────────────────────────────────── */
 function getTipoBadge(tipo){
   if(!tipo) return '<span class="tipo-badge tipo-cobranza">Cobranza</span>';
   const t = String(tipo).toLowerCase();
@@ -587,9 +409,6 @@ function buildRows(arr, startDelay){
   `).join('');
 }
 
-/* ─────────────────────────────────────────
-   Render
-───────────────────────────────────────── */
 document.getElementById('app').innerHTML = `
   <div class="header">
     <div class="logo-container">
@@ -656,9 +475,37 @@ document.getElementById('app').innerHTML = `
       <div class="saldo-final-val">${fmt(saldoActual)}</div>
     </div>
   </div>
+
+  <div class="action-bar">
+    <button class="btn-action btn-print" onclick="window.print()">
+      🖨️ Imprimir / Guardar PDF
+    </button>
+    <button class="btn-action btn-whatsapp" onclick="compartirWhatsApp()">
+      📤 Compartir por WhatsApp
+    </button>
+  </div>
 `;
 
-/* quitar loading cuando ya renderizó */
+function compartirWhatsApp(){
+  const msg =
+    `👋 Hola *${cliente}*, estimado cliente,\n\n` +
+    `🪑 *MUEBLERÍA ADRIANA* te informa tu estado de cuenta:\n\n` +
+    `📋 Folio: *${folio}*\n` +
+    `💰 Importe venta: *${fmt(importeVenta)}*\n` +
+    `✅ Total abonado: *${fmt(totalAbonado)}*\n` +
+    `🔴 Saldo pendiente: *${fmt(saldoActual)}*\n\n` +
+    `📎 Ver estado de cuenta completo:\n${window.location.href}\n\n` +
+    `⚠️ Si tiene alguna diferencia, comuníquese al: *6671896615*`;
+
+  const celLimpio = celular.replace(/\D/g,'');
+  const cel = celLimpio ? (celLimpio.startsWith('52') ? celLimpio : '52' + celLimpio) : '';
+  const waUrl = cel
+    ? `https://wa.me/${cel}?text=${encodeURIComponent(msg)}`
+    : `https://wa.me/?text=${encodeURIComponent(msg)}`;
+
+  window.open(waUrl, '_blank');
+}
+
 requestAnimationFrame(()=> {
   const ld = document.getElementById('loading');
   if (ld) ld.style.display = 'none';
