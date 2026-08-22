@@ -312,18 +312,41 @@ function fmt(val){
   return n.toLocaleString('es-MX', { style:'currency', currency:'MXN', minimumFractionDigits:2, maximumFractionDigits:2 });
 }
 
+// Formato de las fechas con "/" en ESTE enlace: true = dia/mes (APK/appweb),
+// false = mes/dia (bot viejo de AppSheet en locale gringo). Se detecta UNA vez
+// mirando todas las fechas del enlace: alguna con 1er numero >12 => dia/mes;
+// alguna con 2do numero >12 => mes/dia; si nada delata, dia/mes (estandar nuevo).
+let SLASH_ES_DMA = true;
+function detectarFormatoSlash(fechas){
+  let dma = false, mda = false;
+  fechas.forEach(function(s){
+    if (!s || String(s).indexOf('/') === -1) return;
+    const p = String(s).split('/');
+    const a = parseInt(p[0],10), b = parseInt(p[1],10);
+    if (a > 12) dma = true; else if (b > 12) mda = true;
+  });
+  SLASH_ES_DMA = dma ? true : (mda ? false : true);
+}
+function slashDate(dateStr){
+  const p = dateStr.split('/');
+  return SLASH_ES_DMA ? new Date(p[2], p[1]-1, p[0]) : new Date(p[2], p[0]-1, p[1]);
+}
+
 function formatDate(dateStr){
   if (!dateStr) return dateStr;
   let date;
   if (dateStr.includes('/')){
-    // SIEMPRE dia/mes/año (formato mexicano); nunca adivinar mm/dd
-    const parts = dateStr.split('/');
-    date = new Date(parts[2], parts[1]-1, parts[0]);
-  } else if (dateStr.includes('-') && dateStr.length === 10){
+    date = slashDate(dateStr);
+  } else if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)){
     // ISO aaaa-mm-dd parseado local (new Date('...') seria UTC y resta un dia)
     const p = dateStr.split('-');
     date = new Date(p[0], p[1]-1, p[2]);
-  } else { return dateStr; }
+  } else {
+    // dd-mmm.-aa (formato Sheets): intentar normalizarlo tambien
+    const d2 = parseCustomDate(dateStr);
+    if (d2.getTime() === 0) return dateStr;
+    date = d2;
+  }
   if (isNaN(date.getTime())) return dateStr;
   const months = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
   const day = String(date.getDate()).padStart(2,'0');
@@ -333,9 +356,7 @@ function formatDate(dateStr){
 function parseCustomDate(dateStr){
   if (!dateStr) return new Date(0);
   if (dateStr.includes('/')){
-    // SIEMPRE dia/mes/año (formato mexicano)
-    const p = dateStr.split('/');
-    return new Date(p[2], p[1]-1, p[0]);
+    return slashDate(dateStr);
   }
   const months = {ene:0,feb:1,mar:2,abr:3,may:4,jun:5,jul:6,ago:7,sep:8,oct:9,nov:10,dic:11};
   const parts = dateStr.toLowerCase().replace(/\./g,'').split('-');
@@ -366,6 +387,9 @@ try{
   const raw = getParam('abonos');
   if (raw) abonos = JSON.parse(raw);
 }catch(e){}
+
+// Detectar dia/mes vs mes/dia UNA sola vez con todas las fechas del enlace
+detectarFormatoSlash([fechaVenta].concat(abonos.map(function(a){ return a.fecha; })));
 
 if(!abonos.length){
   abonos = [
@@ -467,7 +491,7 @@ document.getElementById('app').innerHTML = `
     <div class="footer-note">
       Generado automáticamente<br>
       <span style="font-family:'DM Mono',monospace;font-size:10px;opacity:.7">
-        ${formatDate(new Date().toLocaleDateString('es-MX',{day:'2-digit',month:'2-digit',year:'numeric'}))}
+        ${(function(){ const d=new Date(); const m=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic']; return String(d.getDate()).padStart(2,'0')+'-'+m[d.getMonth()]+'-'+d.getFullYear(); })()}
       </span>
     </div>
     <div>
